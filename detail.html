@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="系统镜像详细信息：版本、架构、体积、下载链接等">
+  <meta name="keywords" content="系统镜像,详情,Windows,分块下载">
+  <meta name="theme-color" content="#4a8cdb">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>系统镜像详情 - 系统镜像下载</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="top-nav" role="navigation" aria-label="主导航">
+    <div class="nav-left">
+      <a href="index.html" class="nav-brand">
+        <img src="favicon.png" alt="网站图标" class="nav-logo">
+        <span class="nav-title">系统镜像下载</span>
+      </a>
+      <a href="https://xtxz.cc.cd" class="nav-domain" id="navDomain">xtxz.cc.cd</a>
+    </div>
+    <div class="nav-right">
+      <a href="index.html" class="nav-link">首页</a>
+      <a href="tutorial.html" class="nav-link">教程</a>
+      <a href="https://github.com/xtjxxz/xtxz" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式" title="切换暗色模式">
+        <span class="theme-icon theme-icon-light">🌙</span>
+        <span class="theme-icon theme-icon-dark">☀️</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <main class="detail-page" role="main" aria-label="系统镜像详情">
+      <div id="detailContent"></div>
+    </main>
+
+    <footer class="footer">
+      <p>本站使用<a href="https://github.com/zsh-cn/fkxz" target="_blank" rel="noopener noreferrer" class="footer-link">分块下载技术</a>提供镜像下载服务，以保障下载速度与稳定性</p>
+      <p class="tips">点击下载按钮在线下载，或复制分块下载链接后使用文件分块下载工具下载</p>
+    </footer>
+  </div>
+
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部" title="回到顶部">
+    <span class="back-to-top-icon">↑</span>
+  </button>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <script src="script.js" defer></script>
+  <script defer>
+    (function () {
+      'use strict';
+
+      /* ===== 系统镜像数据（filename / total_size / sha256 均取自各 .fkx 分块下载链接的实际内容） ===== */
+      var SYSTEMS = {
+        win1022h2: {
+          name: 'Windows 10 22H2',
+          edition: '22H2',
+          badge: { text: '官方', cls: 'badge-official' },
+          tagline: 'Windows 10 的最终正式版，稳定流畅，适合追求稳定的用户',
+          category: 'windows10',
+          arch: 'x64',
+          fileName: 'Windows 10 22H2.iso',
+          totalSize: 6096424960,
+          sha256: 'd485d370406cbcb68959718817bd12ed87e537a14c885f84962e07136fc4a049',
+
+          downloadUrl: 'xz/?fkx=https://xtjx.cc.cd/w1022h2.fkx',
+          fkxUrl: 'https://xtjx.cc.cd/w1022h2.fkx',
+          features: [
+            'Windows 10 最终正式版，支持周期内稳定可靠',
+            '官方渠道来源，纯净无捆绑、无修改',
+            '支持文件分块下载，速度更快、更稳定',
+            '兼容绝大多数硬件与软件'
+          ]
+        },
+        win10ltsc2021: {
+          name: 'Windows 10 LTSC 2021',
+          edition: '21H2',
+          badge: { text: '官方', cls: 'badge-official' },
+          tagline: '企业长期服务版，无应用商店，极致精简',
+          category: 'windows10',
+          arch: 'x64',
+          fileName: 'Windows 10 LTSC 2021.iso',
+          totalSize: 5044211712,
+          sha256: 'c117c5ddbc51f315c739f9321d4907fa50090ba7b48e7e9a2d173d49ef2f73a3',
+
+          downloadUrl: 'xz/?fkx=https://xtjx.cc.cd/w10ltsc2021.fkx',
+          fkxUrl: 'https://xtjx.cc.cd/w10ltsc2021.fkx',
+          features: [
+            '长期服务版（LTSC），系统更新更保守',
+            '无应用商店、无 Cortana 等组件，极致精简',
+            '官方渠道来源，纯净无捆绑、无修改',
+            '适合服务器与对稳定性要求高的场景'
+          ]
+        },
+        win1126h2: {
+          name: 'Windows 11 26H2',
+          edition: '消费者版',
+          badge: { text: '官方', cls: 'badge-official' },
+          tagline: '全新界面设计，现代化体验',
+          category: 'windows11',
+          arch: 'x64',
+          fileName: 'win1126h2.iso',
+          totalSize: 9112440832,
+          sha256: 'b795b52d598bf8fdea5975844731f4a50c5713876cefc513884354272b023af0',
+
+          downloadUrl: 'xz/?fkx=https://w11.xtjx.cc.cd/win1126h2.iso.fkx',
+          fkxUrl: 'https://w11.xtjx.cc.cd/win1126h2.iso.fkx',
+          features: [
+            'Windows 11 最新版本，全新界面设计',
+            '现代化体验，支持全新硬件平台',
+            '官方渠道来源，纯净无捆绑、无修改',
+            '支持文件分块下载，速度更快、更稳定'
+          ]
+        },
+        win11ltsc2024: {
+          name: 'Windows 11 LTSC 2024',
+          edition: '24H2',
+          badge: { text: '官方', cls: 'badge-official' },
+          tagline: '长期服务版，稳定可靠',
+          category: 'windows11',
+          arch: 'x64',
+          fileName: 'Windows 11 LTSC 2024.iso',
+          totalSize: 5287520256,
+          sha256: '2cb21649590c8cf770cd93556596dff4fd800f24d267a9be9d9ce0ee9e03f5ac',
+
+          downloadUrl: 'xz/?fkx=https://w11ltsc.xtjx.cc.cd/w11ltsc2024.fkx',
+          fkxUrl: 'https://w11ltsc.xtjx.cc.cd/w11ltsc2024.fkx',
+          features: [
+            'Windows 11 长期服务版（LTSC），更新保守稳定',
+            '精简非必要组件，系统更干净',
+            '官方渠道来源，纯净无捆绑、无修改',
+            '适合对长期支持周期有要求的用户'
+          ]
+        },
+        win11ltsc2026: {
+          name: 'Windows 11 LTSC 2026',
+          edition: '26H2',
+          badge: { text: '第三方', cls: 'badge-thirdparty' },
+          tagline: 'Windows 11 最新长期服务版，面向新硬件平台，长期支持',
+          category: 'windows11',
+          arch: 'x64',
+          fileName: 'win11ltsc2026.iso',
+          totalSize: 5876574208,
+          sha256: 'b40a8ef5bf734c05373cc010b78eba7f79c588c987aafe4c7b9c1fa2b1bb45da',
+
+          downloadUrl: 'xz/?fkx=https://win11ltsc2026.xtjx.cc.cd/win11ltsc2026.iso.fkx',
+          fkxUrl: 'https://win11ltsc2026.xtjx.cc.cd/win11ltsc2026.iso.fkx',
+          features: [
+            'Windows 11 LTSC 2026，最新长期服务版本，支持周期长',
+            '面向新硬件平台，精简高效',
+            '第三方镜像，请以 SHA-256 校验文件完整性后再使用',
+            '支持文件分块下载，速度更快、更稳定'
+          ]
+        },
+        win10ltsc22h2: {
+          name: 'Windows 10 LTSC 22H2',
+          edition: '22H2',
+          badge: { text: '本站特色', cls: 'badge-featured' },
+          tagline: '本站特色镜像，长期支持，稳定可靠',
+          category: 'windows10',
+          arch: 'x64',
+          fileName: 'w10ltsc22h2.iso',
+          totalSize: 6020640768,
+          sha256: '8d6ab0d0016c2e2a053d0a05f813c509fc03cd3257c2f44fcb9e55b4b8d229d9',
+
+          downloadUrl: 'xz/?fkx=https://ltsc22h2.xtjx.cc.cd/w10ltsc22h2.iso.fkx',
+          fkxUrl: 'https://ltsc22h2.xtjx.cc.cd/w10ltsc22h2.iso.fkx',
+          features: [
+            'Windows 10 LTSC 长期支持版本，支持周期更长',
+            '精简系统组件，运行更轻快',
+            '本站特色镜像，纯净无捆绑',
+            '支持文件分块下载，速度更快、更稳定'
+          ]
+        },
+        win11ltsc26h2: {
+          name: 'Windows 11 LTSC 26H2',
+          edition: '26H2',
+          badge: { text: '本站特色', cls: 'badge-featured' },
+          tagline: '本站特色镜像，面向最新硬件平台的长期支持版',
+          category: 'windows11',
+          arch: 'x64',
+          fileName: 'w11ltsc26h2.iso',
+          totalSize: 7354200064,
+          sha256: 'b8da4b1e43506c88ea562af0eee3879b71fb2b9407a2f677342fa27308e4b842',
+
+          downloadUrl: 'xz/?fkx=https://ltsc26h2.xtjx.cc.cd/w11ltsc26h2.iso.fkx',
+          fkxUrl: 'https://ltsc26h2.xtjx.cc.cd/w11ltsc26h2.iso.fkx',
+          features: [
+            'Windows 11 LTSC 最新版本，支持周期更长',
+            '面向新硬件平台，精简高效',
+            '本站特色镜像，纯净无捆绑',
+            '支持文件分块下载，速度更快、更稳定'
+          ]
+        }
+      };
+
+      var params = new URLSearchParams(location.search);
+      var xt = params.get('xt');
+      var sys = SYSTEMS[xt];
+      var content = document.getElementById('detailContent');
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, function (c) {
+          return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+          }[c];
+        });
+      }
+
+      function formatSize(bytes) {
+        if (!bytes || bytes <= 0) return '-';
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+        if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+        return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+      }
+
+      if (!sys) {
+        document.title = '未找到该镜像 - 系统镜像下载';
+        content.innerHTML =
+          '<div class="detail-not-found">' +
+            '<span class="detail-not-found-icon">🔍</span>' +
+            '<h1>未找到该镜像</h1>' +
+            '<p>参数 <code style="background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:4px;font-size:0.85rem">?xt=' +
+            escapeHtml(xt || '') + '</code> 对应的镜像不存在或已下线</p>' +
+            '<a href="index.html" class="detail-back">← 返回首页</a>' +
+          '</div>';
+        return;
+      }
+
+      document.title = sys.name + ' 详情 - 系统镜像下载';
+
+      var html =
+        '<a href="index.html" class="detail-back">← 返回镜像列表</a>' +
+
+        '<section class="detail-hero">' +
+          '<span class="badge ' + sys.badge.cls + '">' + sys.badge.text + '</span>' +
+          '<h1>' + escapeHtml(sys.name) + '</h1>' +
+          '<p class="detail-hero-sub">' + escapeHtml(sys.tagline) + '</p>' +
+          '<div class="btn-group">' +
+            '<a href="' + escapeHtml(sys.downloadUrl) + '" target="_blank" rel="noopener noreferrer" class="download-btn" aria-label="下载 ' + escapeHtml(sys.name) + '">' +
+              '<span class="btn-icon" aria-hidden="true">↓</span> 立即下载' +
+            '</a>' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(sys.fkxUrl) + '" aria-label="复制 ' + escapeHtml(sys.name) + ' 分块下载链接">' +
+              '<span class="btn-icon" aria-hidden="true">📋</span> 复制分块下载链接' +
+            '</button>' +
+          '</div>' +
+          '<div class="detail-specs">' +
+            '<div class="detail-spec"><div class="detail-spec-label">版本</div><div class="detail-spec-value">' + escapeHtml(sys.edition) + '</div></div>' +
+            '<div class="detail-spec"><div class="detail-spec-label">架构</div><div class="detail-spec-value">' + escapeHtml(sys.arch) + '</div></div>' +
+            '<div class="detail-spec"><div class="detail-spec-label">文件名称</div><div class="detail-spec-value">' + escapeHtml(sys.fileName) + '</div></div>' +
+            '<div class="detail-spec"><div class="detail-spec-label">镜像体积</div><div class="detail-spec-value">' + escapeHtml(formatSize(sys.totalSize)) + '</div></div>' +
+            '<div class="detail-spec detail-spec-sha"><div class="detail-spec-label">SHA-256</div><div class="detail-spec-value"><code class="sha256-code" title="' + escapeHtml(sys.sha256) + '">' + escapeHtml(sys.sha256) + '</code></div></div>' +
+          '</div>' +
+          '<div class="detail-sha-copy-row">' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(sys.sha256) + '" aria-label="复制 ' + escapeHtml(sys.name) + ' SHA-256">' +
+              '<span class="btn-icon" aria-hidden="true">📋</span> 复制 SHA-256' +
+            '</button>' +
+          '</div>' +
+        '</section>' +
+
+        '<section class="detail-section">' +
+          '<h2>镜像说明</h2>' +
+          '<ul class="detail-list">' +
+            sys.features.map(function (f) { return '<li>' + escapeHtml(f) + '</li>'; }).join('') +
+          '</ul>' +
+        '</section>' +
+
+        '<section class="detail-section">' +
+          '<h2>下载链接</h2>' +
+          '<div class="detail-link-row">' +
+            '<span class="detail-link-row-label">在线下载</span>' +
+            '<code>' + escapeHtml(sys.downloadUrl) + '</code>' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(sys.downloadUrl) + '" aria-label="复制在线下载链接">复制</button>' +
+          '</div>' +
+          '<div class="detail-link-row">' +
+            '<span class="detail-link-row-label">分块下载链接</span>' +
+            '<code>' + escapeHtml(sys.fkxUrl) + '</code>' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(sys.fkxUrl) + '" aria-label="复制分块下载链接">复制</button>' +
+          '</div>' +
+          '<p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem">推荐使用<a href="tutorial.html" style="color:var(--accent);text-decoration:underline">文件分块下载工具</a>配合分块下载链接下载，速度更快、更稳定，支持断点续传</p>' +
+        '</section>';
+
+      content.innerHTML = html;
+    })();
+  </script>
+</body>
+</html>
