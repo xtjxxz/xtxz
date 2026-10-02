@@ -96,7 +96,7 @@
         },
         win1126h2: {
           name: 'Windows 11 26H2',
-          edition: '消费者版',
+          edition: '26H2',
           badge: { text: '官方', cls: 'badge-official' },
           tagline: '全新界面设计，现代化体验',
           category: 'windows11',
@@ -236,6 +236,13 @@
 
       document.title = sys.name + ' 详情 - 系统镜像下载';
 
+      /* 将相对路径解析为完整 URL，供显示和复制使用 */
+      function resolveUrl(url) {
+        return new URL(url, location.href).href;
+      }
+      var fullDownloadUrl = resolveUrl(sys.downloadUrl);
+      var fullFkxUrl = resolveUrl(sys.fkxUrl);
+
       var html =
         '<a href="index.html" class="detail-back">← 返回镜像列表</a>' +
 
@@ -244,10 +251,10 @@
           '<h1>' + escapeHtml(sys.name) + '</h1>' +
           '<p class="detail-hero-sub">' + escapeHtml(sys.tagline) + '</p>' +
           '<div class="btn-group">' +
-            '<a href="' + escapeHtml(sys.downloadUrl) + '" target="_blank" rel="noopener noreferrer" class="download-btn" aria-label="下载 ' + escapeHtml(sys.name) + '">' +
+            '<a href="' + escapeHtml(fullDownloadUrl) + '" target="_blank" rel="noopener noreferrer" class="download-btn" aria-label="下载 ' + escapeHtml(sys.name) + '">' +
               '<span class="btn-icon" aria-hidden="true">↓</span> 立即下载' +
             '</a>' +
-            '<button class="copy-btn" data-copy="' + escapeHtml(sys.fkxUrl) + '" aria-label="复制 ' + escapeHtml(sys.name) + ' 分块下载链接">' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(fullFkxUrl) + '" aria-label="复制 ' + escapeHtml(sys.name) + ' 分块下载链接">' +
               '<span class="btn-icon" aria-hidden="true">📋</span> 复制分块下载链接' +
             '</button>' +
           '</div>' +
@@ -262,6 +269,9 @@
             '<button class="copy-btn" data-copy="' + escapeHtml(sys.sha256) + '" aria-label="复制 ' + escapeHtml(sys.name) + ' SHA-256">' +
               '<span class="btn-icon" aria-hidden="true">📋</span> 复制 SHA-256' +
             '</button>' +
+            '<a href="https://fkxz.zhshh.cn/download/wjxz.exe" target="_blank" rel="noopener noreferrer" class="copy-btn" aria-label="下载文件分块下载工具">' +
+              '<span class="btn-icon" aria-hidden="true">📦</span> 下载分块下载工具' +
+            '</a>' +
           '</div>' +
         '</section>' +
 
@@ -276,13 +286,13 @@
           '<h2>下载链接</h2>' +
           '<div class="detail-link-row">' +
             '<span class="detail-link-row-label">在线下载</span>' +
-            '<code>' + escapeHtml(sys.downloadUrl) + '</code>' +
-            '<button class="copy-btn" data-copy="' + escapeHtml(sys.downloadUrl) + '" aria-label="复制在线下载链接">复制</button>' +
+            '<code>' + escapeHtml(fullDownloadUrl) + '</code>' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(fullDownloadUrl) + '" aria-label="复制在线下载链接">复制</button>' +
           '</div>' +
           '<div class="detail-link-row">' +
             '<span class="detail-link-row-label">分块下载链接</span>' +
-            '<code>' + escapeHtml(sys.fkxUrl) + '</code>' +
-            '<button class="copy-btn" data-copy="' + escapeHtml(sys.fkxUrl) + '" aria-label="复制分块下载链接">复制</button>' +
+            '<code>' + escapeHtml(fullFkxUrl) + '</code>' +
+            '<button class="copy-btn" data-copy="' + escapeHtml(fullFkxUrl) + '" aria-label="复制分块下载链接">复制</button>' +
           '</div>' +
           '<p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem">推荐使用<a href="tutorial.html" style="color:var(--accent);text-decoration:underline">文件分块下载工具</a>配合分块下载链接下载，速度更快、更稳定，支持断点续传</p>' +
         '</section>';

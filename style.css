@@ -692,6 +692,7 @@ body {
   letter-spacing: 0.3px;
   cursor: pointer;
   font-family: inherit;
+  text-decoration: none;
   transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   white-space: nowrap;
 }
@@ -701,6 +702,7 @@ body {
   color: #ffffff;
   transform: scale(1.04);
   box-shadow: var(--shadow-btn-secondary);
+  text-decoration: none;
 }
 
 .copy-btn:active {
@@ -1510,6 +1512,7 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 12px;
+  gap: 10px;
 }
 
 .detail-section {
