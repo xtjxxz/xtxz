@@ -9,6 +9,14 @@
   var backToTop = doc.getElementById('backToTop');
   var toastContainer = doc.getElementById('toastContainer');
   var copyButtons = doc.querySelectorAll('.copy-btn');
+  var downloadItems = Array.prototype.slice.call(doc.querySelectorAll('.download-item'));
+  var filterTabs = Array.prototype.slice.call(doc.querySelectorAll('.filter-tab'));
+  var searchInput = doc.getElementById('systemSearch');
+  var searchClear = doc.getElementById('searchClear');
+  var noResults = doc.getElementById('noResults');
+
+  var activeFilter = 'all';
+  var searchQuery = '';
 
   var THEME_KEY = 'xtxz-theme';
   var DARK_CLASS = 'dark';
@@ -217,35 +225,69 @@
     }
   });
 
-  var versionToggle = doc.getElementById('versionToggle');
+  /* ===== 分类筛选 & 搜索 ===== */
+  var filterDirty = false;
+  var STAGGER = 0.08; /* seconds between each visible item's entrance */
 
-  if (versionToggle) {
-    var hostname = window.location.hostname;
-    var pathname = window.location.pathname;
-
-    var isOfficial = hostname === 'xtxz.cc.cd';
-    var currentPage = '';
-    if (pathname.indexOf('tutorial.html') !== -1) {
-      currentPage = 'tutorial.html';
-    } else {
-      currentPage = 'index.html';
-    }
-
-    if (isOfficial) {
-      versionToggle.textContent = '社区版';
-      versionToggle.addEventListener('click', function () {
-        var base = 'https://xtjxxz.github.io/xtxz/';
-        window.location.href = base + (currentPage === 'index.html' ? '' : currentPage);
-      });
-    } else {
-      versionToggle.textContent = '官方版';
-      versionToggle.addEventListener('click', function () {
-        var base = 'https://xtxz.cc.cd/';
-        window.location.href = base + currentPage;
-      });
+  function applyFilter() {
+    var shown = 0;
+    downloadItems.forEach(function (item) {
+      var category = item.getAttribute('data-category') || '';
+      var title = (item.querySelector('h2') || {}).textContent || '';
+      var keywords = item.getAttribute('data-keywords') || '';
+      var searchHaystack = title.toLowerCase() + ' ' + keywords.toLowerCase();
+      var passFilter = activeFilter === 'all' || category === activeFilter;
+      var passSearch = !searchQuery || searchHaystack.indexOf(searchQuery) !== -1;
+      var visible = passFilter && passSearch;
+      item.classList.toggle('hidden', !visible);
+      if (visible) {
+        shown++;
+        if (filterDirty) {
+          /* Restart the staggered entrance animation for shown items */
+          item.style.animation = 'none';
+          void item.offsetWidth; /* force reflow */
+          item.style.animation = 'slideInUp 0.5s ease ' + (shown * STAGGER) + 's backwards';
+        }
+      }
+    });
+    filterDirty = false;
+    if (noResults) {
+      noResults.hidden = shown !== 0;
     }
   }
 
+  function setFilter(filter) {
+    activeFilter = filter;
+    filterDirty = true;
+    filterTabs.forEach(function (tab) {
+      tab.classList.toggle('active', tab.getAttribute('data-filter') === filter);
+    });
+    applyFilter();
+  }
+
+  filterTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      setFilter(tab.getAttribute('data-filter'));
+    });
+  });
+
+  if (searchInput && searchClear) {
+    searchInput.addEventListener('input', function () {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      searchClear.hidden = searchQuery.length === 0;
+      applyFilter();
+    });
+
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      searchQuery = '';
+      searchClear.hidden = true;
+      searchInput.focus();
+      applyFilter();
+    });
+  }
+
+  /* ===== 初始化 ===== */
   function init() {
     initTheme();
   }
