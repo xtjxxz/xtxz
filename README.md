@@ -37,6 +37,7 @@
 | Windows 11 LTSC 2024 | 企业长期服务版 | 长期服务版，稳定可靠 |
 | Windows 10 LTSC 22H2 | 企业长期服务版 | Windows 10 LTSC，长期支持 |
 | Windows 11 LTSC 26H2 | 企业长期服务版 | Windows 11 LTSC，长期支持 |
+|  [第三方] Windows 11 LTSC 2026 | 企业长期服务版 | Windows 11 LTSC，长期支持 |
 
 > 需要其他系统镜像？欢迎在 [Issues](https://github.com/xtjxxz/xtxz/issues) 中提交需求。
 
